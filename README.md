@@ -1,0 +1,10 @@
+- Welcome message from "/"
+- Personalized greeting from "/<name>"
+- Retrieves preset ipsums
+  - "/adev" for Arrested Developement
+  - "/futurama" for Futurama
+  - "/tina" for Tina from Bob's Burgers
+- Specify number of times for ipsums to print with "/<ipsum_name>/num> (i.e., "/tina/4")
+- Allows posting of ipsums to database
+- Retrieve posted ipsums with "/lorem/<ipsum_id>" (i.e., "/lorem/2")
+- All ipsums rendered in JSON
