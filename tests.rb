@@ -2,10 +2,13 @@ require 'rubygems'
 require 'bundler/setup'
 ENV['RACK_ENV'] = 'test'
 
-require_relative 'first_app'
 require 'test/unit'
 require 'rack/test'
 require 'faker'
+
+require_relative 'first_app'
+require_relative 'ipsum'
+require_relative 'migration'
 
 class FirstAppTest < Test::Unit::TestCase
   include Rack::Test::Methods
@@ -17,19 +20,38 @@ class FirstAppTest < Test::Unit::TestCase
   def test_the_index
     get '/'
     assert last_response.ok?
-    assert_equal 'Hello World', last_response.body
+    assert_equal 'Welcome!', last_response.body
   end
 
   def test_names_page
     name = Faker::Name.first_name
     get "/#{name}"
     assert last_response.ok?
-    assert_equal "Hi there, #{name}", last_response.body
+    assert_equal "Hi, #{name}!", last_response.body
   end
 
-  def test_lipsums_page
-    # TODO: Fill me in to check each lipsum you support.
+  def test_tina_lipsum
+    get "/lorem/tina"
+    assert last_response.ok?
+    assert_equal Tina.text, last_response.body
   end
 
+  def test_adev_lipsum
+    get "/lorem/adev/4"
+    assert last_response.ok?
+    assert_equal 4, last_response.body.split("</p>").count
+  end
+
+  def test_futurama_lipsum
+    get "/lorem/futurama/2"
+    assert last_response.ok?
+    assert_equal 2, last_response.body.split("</p>").count
+  end
+
+  def test_make_a_post
+    post "/lorem/new",
+      { name: Faker::Zelda.character, paragraph: "this is a paragraph" }
+    assert last_response.ok?
+  end
 
 end
