@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sqlite3'
-require'active_record'
+require 'active_record'
+require 'json'
 
 require_relative 'base_lorem'
 require_relative 'tina'
@@ -33,12 +34,10 @@ end
 
 get "/lorem/:lipsum/?:num?" do
   if %w(adev futurama tina).include? params[:lipsum]
-    Object.const_get(params[:lipsum].capitalize).call(params[:num])
-  elsif Ipsum.find_by(id: params[:lipsum])
+    { name: params[:lipsum], paragraphs: Object.const_get(params[:lipsum].capitalize).call(params[:num]) }.to_json
   # elsif params[:lipsum].to_i > 0
-    ipsum = Ipsum.find(params[:lipsum])
-    "<p>Name: #{ipsum.name}</p>
-    <p>Paragraph: #{ipsum.paragraph}</p>"
+  elsif Ipsum.find_by(id: params[:lipsum])
+    Ipsum.find(params[:lipsum]).to_json
   else
     status 404
   end
